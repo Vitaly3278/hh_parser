@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+vacancies.db
+*.sqlite3
