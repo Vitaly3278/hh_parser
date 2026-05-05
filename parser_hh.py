@@ -15,6 +15,10 @@ SEARCH_QUERIES = (
     "Python developer",
     "Data Engineer Python",
     "Python",
+    "1С",
+    "1C",
+    "1С разработчик",
+    "1С программист",
 )
 REQUEST_TIMEOUT_SECONDS = 15
 EXPERIENCE_QA_TO_LABEL = {
