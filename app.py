@@ -12,6 +12,7 @@ from database import (
     get_stats,
     get_vacancies,
     init_db,
+    normalize_1c_roles,
     save_vacancies,
     toggle_favorite,
 )
@@ -21,6 +22,7 @@ from parser_hh import load_all_vacancies
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dev-secret-key-change-in-production"
 init_db()
+normalize_1c_roles()
 MOSCOW_TZ = ZoneInfo("Europe/Moscow")
 LAST_RUN_NEW = 0
 
@@ -104,6 +106,7 @@ def update_data():
     try:
         vacancies, errors = load_all_vacancies(pages_per_query=2, per_page=50)
         save_result = save_vacancies(vacancies)
+        normalized_1c = normalize_1c_roles()
         added = save_result["added"]
         updated = save_result["updated"]
         LAST_RUN_NEW = added
@@ -118,7 +121,8 @@ def update_data():
             flash(
                 "Обновление завершено: "
                 f"загружено {len(vacancies)} вакансий, "
-                f"добавлено новых {added}, обновлено {updated}.",
+                f"добавлено новых {added}, обновлено {updated}, "
+                f"нормализовано ролей 1С {normalized_1c}.",
                 "success",
             )
             if errors:

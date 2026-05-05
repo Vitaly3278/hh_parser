@@ -15,10 +15,10 @@ SEARCH_QUERIES = (
     "Python developer",
     "Data Engineer Python",
     "Python",
-    "1С",
-    "1C",
     "1С разработчик",
     "1С программист",
+    "1C разработчик",
+    "1C программист",
 )
 REQUEST_TIMEOUT_SECONDS = 15
 EXPERIENCE_QA_TO_LABEL = {
@@ -88,6 +88,8 @@ def _extract_snippet(card: Any) -> str:
 
 def _detect_role(title: str, search_query: str) -> str:
     text = f"{title} {search_query}".lower()
+    if re.search(r"\b1\s*[сc]\b", text):
+        return "1С"
     if "data engineer" in text or "дата инженер" in text:
         return "Data Engineer"
     if "программист" in text:

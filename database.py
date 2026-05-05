@@ -147,6 +147,29 @@ def save_vacancies(vacancies: list[dict[str, Any]]) -> dict[str, int]:
     return {"added": added, "updated": updated}
 
 
+def normalize_1c_roles() -> int:
+    with get_connection() as conn:
+        cursor = conn.execute(
+            """
+            UPDATE vacancies
+            SET role = '1С'
+            WHERE COALESCE(role, '') != '1С'
+              AND (
+                title LIKE '%1С%'
+                OR title LIKE '%1C%'
+                OR title LIKE '%1с%'
+                OR title LIKE '%1c%'
+                OR search_query LIKE '%1С%'
+                OR search_query LIKE '%1C%'
+                OR search_query LIKE '%1с%'
+                OR search_query LIKE '%1c%'
+              )
+            """
+        )
+        conn.commit()
+    return cursor.rowcount
+
+
 def get_vacancies(
     limit: int = 200,
     search: str | None = None,
